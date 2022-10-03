@@ -5,12 +5,16 @@ const path = require('path');
 const sequential = require('promise-sequential');
 const currentDir = path.resolve(__dirname);
 
-const file = fs.readFileSync('./irasutoya.json', 'utf8');
-const kawaiImages = JSON.parse(file);
+const inputFile =
+    process.env.NODE_ENV === 'production'
+        ? './irasutoya.json'
+        : './sample.json';
 
-const justImages = kawaiImages.map((item) => item.image_url);
+const file = fs.readFileSync(inputFile, 'utf8');
+const parsed = JSON.parse(file);
+const kawaiimages = parsed.map((item) => item.image_url);
 
-console.log('Start downloading images...');
+console.log('Start downloading images... completed:');
 
 async function main(image_url) {
     const filename = image_url.split('/').pop();
@@ -19,9 +23,16 @@ async function main(image_url) {
         url: image_url,
         dest: filepath,
     };
-    await download.image(options);
+    await download
+        .image(options)
+        .then(({ filename }) => {
+            console.log(filename);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
-const promises = justImages.map((item) => () => main(item));
+const promises = kawaiimages.map((item) => () => main(item));
 
 sequential(promises).then(() => {
     console.log('Done!');
