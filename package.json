@@ -1,17 +1,16 @@
 {
   "name": "irasutoya-crawler",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "NODE_ENV=production node index.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "image-downloader": "^4.3.0",
-    "nodemon": "^2.0.20",
     "promise-sequential": "^1.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
